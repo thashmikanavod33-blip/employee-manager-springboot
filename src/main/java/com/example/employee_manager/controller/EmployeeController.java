@@ -16,16 +16,17 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/employees")
-    public String viewHomePage(Model model) {
-        model.addAttribute("listEmployees", employeeService.getAllEmployees());
+    public String viewHomePage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        model.addAttribute("listEmployees", employeeService.listAll(keyword));
         model.addAttribute("employee", new Employee());
+        model.addAttribute("keyword", keyword);
         return "employees";
     }
 
     @PostMapping("/employees")
     public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("listEmployees", employeeService.getAllEmployees());
+            model.addAttribute("listEmployees", employeeService.listAll(null));
             return "employees";
         }
         employeeService.saveEmployee(employee);

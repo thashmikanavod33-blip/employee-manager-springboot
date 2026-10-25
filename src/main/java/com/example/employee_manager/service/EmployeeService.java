@@ -13,7 +13,10 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public List<Employee> getAllEmployees() {
+    public List<Employee> listAll(String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return employeeRepository.findByFullNameContainingIgnoreCase(keyword);
+        }
         return employeeRepository.findAll();
     }
 
@@ -28,4 +31,5 @@ public class EmployeeService {
     public void deleteEmployeeById(Long id) {
         employeeRepository.deleteById(id);
     }
+    
 }
